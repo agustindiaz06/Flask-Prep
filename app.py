@@ -1,5 +1,5 @@
 from flask import Flask, url_for
-
+import sqlite3
 app = Flask(__name__)
 @app.route("/")
 def hello_wordl():
@@ -33,3 +33,46 @@ def partido(e1,e2):
     return f"{e1} vs {e2}"
 
 
+db = None
+
+
+def dict_factory(cursor, row):
+  """Arma un diccionario con los valores de la fila."""
+  fields = [column[0] for column in cursor.description]
+  return {key: value for key, value in zip(fields, row)}
+
+
+def abrirConexion():
+   global db
+   db = sqlite3.connect("instance/datos.sqlite")
+   db.row_factory = dict_factory
+
+
+def cerrarConexion():
+   global db
+   db.close()
+   db = None
+
+
+@app.route("/test-db")
+def testDB():
+   abrirConexion()
+   cursor = db.cursor()
+   cursor.execute("SELECT COUNT(*) AS cant FROM usuarios; ")
+   res = cursor.fetchone()
+   registros = res["cant"]
+   cerrarConexion()
+   return f"Hay {registros} registros en la tabla usuarios"
+
+
+
+@app.route("/rutaNueva")
+def testNueva():
+   abrirConexion()
+   cursor = db.cursor()
+   cursor.execute("SELECT usuario , email FROM usuarios ")
+   res = cursor.fetchone()
+   registros = res["usuario"]
+   registros2 = res["email"]
+   cerrarConexion()
+   return f"los usuarios que hay son los de   {registros}  en la tabla usuarios y el  email del usuario es {registros2}"
