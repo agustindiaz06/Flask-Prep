@@ -1,4 +1,4 @@
-from flask import Flask, url_for
+from flask import Flask, url_for, render_template
 import sqlite3
 app = Flask(__name__)
 @app.route("/")
@@ -70,9 +70,7 @@ def testDB():
 def testNueva():
    abrirConexion()
    cursor = db.cursor()
-   cursor.execute("SELECT usuario , email FROM usuarios ")
-   res = cursor.fetchone()
-   registros = res["usuario"]
-   registros2 = res["email"]
+   cursor.execute("SELECT usuario , telefono , direccion email FROM usuarios ")
+   listaUsuarios = cursor.fetchall()
    cerrarConexion()
-   return f"los usuarios que hay son los de   {registros}  en la tabla usuarios y el  email del usuario es {registros2}"
+   return render_template("usuarios.html", usuarios=listaUsuarios ,email=listaUsuarios, telefono=listaUsuarios , direccion=listaUsuarios   )
