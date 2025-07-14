@@ -66,11 +66,29 @@ def testDB():
 
 
 
-@app.route("/rutaNueva")
+@app.route("/usuarios")
 def testNueva():
    abrirConexion()
    cursor = db.cursor()
-   cursor.execute("SELECT usuario , telefono , direccion email FROM usuarios ")
+   cursor.execute("SELECT usuario ,id FROM usuarios ")
    listaUsuarios = cursor.fetchall()
    cerrarConexion()
-   return render_template("usuarios.html", usuarios=listaUsuarios ,email=listaUsuarios, telefono=listaUsuarios , direccion=listaUsuarios   )
+   return render_template("usuarios.html", usuarios=listaUsuarios)
+
+# modificar la ruta para que acepte el id como parametro LISTO
+
+# modificar la consulta de sql para que solamente seleccione el que tiene ese id (usar un ? donde va el valor)
+
+# cambiar fetchall por fetchone LISTO
+
+# cambiar la plantilla por detalleUsuario  LISTO
+
+# pasarle ese resultado a la plantilla como usr (que ya no es una lista sino un solo usuario) LISTO
+@app.route("/usuario/<int:id>")
+def detalle(id):
+   abrirConexion()
+   cursor = db.cursor()
+   cursor.execute("SELECT usuario, telefono , direccion , email  FROM usuarios WHERE id = ?", (id,))
+   Usuario = cursor.fetchone()
+   cerrarConexion()
+   return render_template("detalleUsuario.html", usr=Usuario)

@@ -6,12 +6,11 @@
     <title>Document</title>
   </head>
   <body>
-    Usuarios: {% for usr in usuarios %}
     <div>
-      <a href="{{url_for('detalle', id=usr['id'])}}"
-        >Usuario: {{usr['usuario']}}</a
-      >
+      Usuario: {{usr['usuario']}}, email: {{usr['email']}} , telefono:
+      {{usr['telefono']}} , direccion: {{usr['direccion']}}
     </div>
-    {% endfor %} listo
+
+    listo
   </body>
 </html>
